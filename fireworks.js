@@ -1,4 +1,4 @@
-/*jslint long:true, this:true browser:true, unordered:true */
+/*jslint long:true, this:true, browser:true, unordered:true */
 /*jshint esversion: 6 */
 
 /*
@@ -7,6 +7,8 @@ Inspired by https://stackoverflow.com/q/43498923
 */
 
 (function () {
+    "use strict";
+
     // Return an random integer between the given values inclusive of min but not max
     function randBetween(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
@@ -24,7 +26,9 @@ Inspired by https://stackoverflow.com/q/43498923
 
             this.size = randBetween(Config.particles.minSize, Config.particles.maxSize + 1);
 
-            /* set color in Explosion class
+            this.decayRate = Config.particles.decayRate;
+
+            /* set particle color in Explosion class
             this.r = randBetween(0, 256);
             this.g = randBetween(0, 256);
             this.b = randBetween(0, 256); */
@@ -32,10 +36,10 @@ Inspired by https://stackoverflow.com/q/43498923
 
         this.Explosion = function (x, y) {
             this.particles = [];
-            // set all particles to the same color
-            let red = randBetween(0, 256);
-            let green = randBetween(0, 256);
-            let blue = randBetween(0, 256);
+            // set all particles to the same color, not too dark
+            let red = randBetween(50, 256);
+            let green = randBetween(50, 256);
+            let blue = randBetween(50, 256);
             /* Note: could also use the ES6 spread operator ("..."), like this:
                [...new Array(Config.particles.perExplosion).keys()].forEach(function () { */
             Array.from(new Array(Config.particles.perExplosion).keys()).forEach(function () {
@@ -52,7 +56,7 @@ Inspired by https://stackoverflow.com/q/43498923
                 explosion.particles.forEach(function (particle) {
                     particle.x += particle.dx;
                     particle.y += particle.dy;
-                    particle.size -= 0.1;
+                    particle.size -= particle.decayRate;
                 }, this);
                 explosion.particles = explosion.particles.filter(function (particle) {
                     return (particle.size > 0.0);
@@ -65,7 +69,7 @@ Inspired by https://stackoverflow.com/q/43498923
     }
 
     function View() {
-        this.canvas = document.getElementById("canvas");
+        this.canvas = document.querySelector("canvas");
         this.canvas.width = 640;
         this.canvas.height = 400;
         this.ctx = this.canvas.getContext("2d");
@@ -115,7 +119,8 @@ Inspired by https://stackoverflow.com/q/43498923
             minSpeed: -5,
             maxSpeed: 5,
             minSize: 2,
-            maxSize: 5
+            maxSize: 5,
+            decayRate: 0.075
         }
     };
 
