@@ -21,8 +21,8 @@ Inspired by https://stackoverflow.com/q/43498923
             this.x = x;
             this.y = y;
 
-            this.dx = randBetween(Config.particles.minSpeed, Config.particles.maxSpeed);
-            this.dy = randBetween(Config.particles.minSpeed, Config.particles.maxSpeed);
+            this.dx = randBetween(Config.particles.minSpeed, Config.particles.maxSpeed + 1);
+            this.dy = randBetween(Config.particles.minSpeed, Config.particles.maxSpeed + 1);
 
             this.size = randBetween(Config.particles.minSize, Config.particles.maxSize + 1);
 
@@ -56,7 +56,7 @@ Inspired by https://stackoverflow.com/q/43498923
                 explosion.particles.forEach(function (particle) {
                     particle.x += particle.dx;
                     particle.y += particle.dy;
-                    particle.size -= particle.decayRate;
+                    particle.size += particle.decayRate;
                 }, this);
                 explosion.particles = explosion.particles.filter(function (particle) {
                     return (particle.size > 0.0);
@@ -119,8 +119,8 @@ Inspired by https://stackoverflow.com/q/43498923
             minSpeed: -5,
             maxSpeed: 5,
             minSize: 2,
-            maxSize: 5,
-            decayRate: 0.075
+            maxSize: 4,
+            decayRate: -0.075  // per frame
         }
     };
 
